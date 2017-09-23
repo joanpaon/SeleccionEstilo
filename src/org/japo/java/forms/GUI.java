@@ -15,19 +15,20 @@
  */
 package org.japo.java.forms;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.net.URL;
-import javax.swing.ImageIcon;
+import java.util.Properties;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import org.japo.java.components.BackgroundPanel;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
 import org.japo.java.events.AEM;
+import org.japo.java.libraries.UtilesSwing;
 
 /**
  *
@@ -35,121 +36,113 @@ import org.japo.java.events.AEM;
  */
 public class GUI extends JFrame {
 
-    // Tamaño de la ventana
-    public static final int VENTANA_ANC = 600;
-    public static final int VENTANA_ALT = 300;
+    // Propiedades App
+    public static final String PRP_LOOK_AND_FEEL = "look_and_feel";
+    public static final String PRP_FAVICON = "favicon";
 
-    // Componentes del IGU
+    // Valores por Defecto
+    public static final String DEF_LOOK_AND_FEEL = UtilesSwing.LNF_NIMBUS;
+    public static final String DEF_FAVICON = "img/favicon.png";
+
+    // Referencias
+    private Properties prp;
     private JCheckBox cbxNegrita;
     private JCheckBox cbxCursiva;
-    private JLabel lblPrueba;
+    private JLabel lblRotulo;
 
-    // Valores predeterminados de fuente
-    private final String FNT_FAM = "Georgia";
-    private final int FNT_TAM_LBL = 40;
-    private final int FNT_TAM_CBX = 30;
+    // Constructor
+    public GUI(Properties prp) {
+        // Inicialización Anterior
+        initBefore(prp);
 
-    // Recurso con la imagen de forndo del panel
-    private final String RES_PKG = "/img";
-    private final String RES_IMG = "background.jpg";
-    private final String RECURSO = RES_PKG + "/" + RES_IMG;
-
-    // Texto de prueba
-    private final String TEXTO = "Érase una vez Java";
-
-    public GUI() {
-        // Inicialización PREVIA
-        beforeInit();
-
-        // Creación del interfaz
+        // Creación Interfaz
         initComponents();
 
-        // Inicialización POSTERIOR
-        afterInit();
+        // Inicializacion Posterior
+        initAfter();
     }
 
     // Construcción del IGU
     private void initComponents() {
-        // Tamaños de componentes
-        Dimension dimBotones = new Dimension(200, 35);
-
-        // Fuente de la etiqueta
-        Font fntLabel = new Font(FNT_FAM, Font.PLAIN, FNT_TAM_LBL);
-        Font fntBoton = new Font(FNT_FAM, Font.PLAIN, FNT_TAM_CBX);
-
-        // Gestor de eventos de accion
-        AEM aem = new AEM(this);
-
         // Etiqueta de prueba
-        lblPrueba = new JLabel();
-        lblPrueba.setFont(fntLabel);
-        lblPrueba.setText(TEXTO);
-        lblPrueba.setHorizontalAlignment(JLabel.CENTER);
-
-        // Imagen de fondo
-        URL urlImagen = getClass().getResource(RECURSO);
-        Image i = new ImageIcon(urlImagen).getImage();
-
-        // Panel de control
-        JPanel pnlControl = new BackgroundPanel(i);
-        pnlControl.setLayout(new GridLayout(2, 1));
+        lblRotulo = new JLabel();
+        lblRotulo.setFont(new Font("Georgia", Font.PLAIN, 40));
+        lblRotulo.setText("Érase una vez Java");
+        lblRotulo.setHorizontalAlignment(JLabel.CENTER);
+        lblRotulo.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        lblRotulo.setOpaque(true);
+        lblRotulo.setBackground(Color.WHITE);
 
         // Selector de negrita
         cbxNegrita = new JCheckBox("Negrita");
-        cbxNegrita.addActionListener(aem);
-        cbxNegrita.setPreferredSize(dimBotones);
+        cbxNegrita.addActionListener(new AEM(this));
+        cbxNegrita.setPreferredSize(new Dimension(200, 35));
         cbxNegrita.setOpaque(false);
-        cbxNegrita.setFont(fntBoton);
+        cbxNegrita.setFont(new Font("Cambria", Font.PLAIN, 30));
         cbxNegrita.setHorizontalAlignment(JCheckBox.CENTER);
-        pnlControl.add(cbxNegrita);
 
         // Selector de cursiva
         cbxCursiva = new JCheckBox("Cursiva");
-        cbxCursiva.addActionListener(aem);
-        cbxCursiva.setPreferredSize(dimBotones);
+        cbxCursiva.addActionListener(new AEM(this));
+        cbxCursiva.setPreferredSize(new Dimension(200, 35));
         cbxCursiva.setOpaque(false);
-        cbxCursiva.setFont(fntBoton);
+        cbxCursiva.setFont(new Font("Cambria", Font.PLAIN, 30));
         cbxCursiva.setHorizontalAlignment(JCheckBox.CENTER);
+
+        // Panel de control
+        JPanel pnlControl = new JPanel(new GridLayout(2, 1));
+        pnlControl.setBorder(new EmptyBorder(10, 10, 0, 10));
+        pnlControl.add(cbxNegrita);
         pnlControl.add(cbxCursiva);
 
         // Panel principal
-        JPanel pnlPpal = new JPanel();
-        pnlPpal.setLayout(new GridLayout(2, 1));
-        pnlPpal.add(lblPrueba);
+        JPanel pnlPpal = new JPanel(new GridLayout(2, 1));
+        pnlPpal.setBorder(new EmptyBorder(10, 10, 10, 10));
+        pnlPpal.add(lblRotulo);
         pnlPpal.add(pnlControl);
 
         // Ventana principal
-        setTitle("Respuesta Encuesta");
         setContentPane(pnlPpal);
+        setTitle("Swing Manual #10");
         setResizable(false);
-        setSize(VENTANA_ANC, VENTANA_ALT);
+        setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    // Inicialización antes del IGU
-    private void beforeInit() {
+    // Inicialización Anterior    
+    private void initBefore(Properties prp) {
+        // Memorizar Referencia
+        this.prp = prp;
 
+        // Establecer LnF
+        UtilesSwing.establecerLnF(prp.getProperty(PRP_LOOK_AND_FEEL, DEF_LOOK_AND_FEEL));
     }
 
-    // Inicialización después del IGU
-    private void afterInit() {
-
+    // Inicialización Posterior
+    private void initAfter() {
+        // Establecer Favicon
+        UtilesSwing.establecerFavicon(this, prp.getProperty(PRP_FAVICON, DEF_FAVICON));
     }
 
+    // Procesar Estilo
     public void procesarEstilo(ActionEvent e) {
-        // Valores actuales
+        // Valores Actuales Fuente
+        String familia = lblRotulo.getFont().getFamily();
+        int estilo = lblRotulo.getFont().getStyle();
+        int talla = lblRotulo.getFont().getSize();
+                
+        // Estilo Seleccionado        
         int negrita = cbxNegrita.isSelected() ? Font.BOLD : Font.PLAIN;
         int cursiva = cbxCursiva.isSelected() ? Font.ITALIC : Font.PLAIN;
 
-        // Calcula estilo
-        int estilo = negrita + cursiva;
+        // Calcula Estilo
+        estilo = negrita + cursiva;
 
         // Actualiza fuente
-        Font fuente = new Font(FNT_FAM, estilo, FNT_TAM_LBL);
+        Font fuente = new Font(familia, estilo, talla);
 
-        // Aplica fuente
-        lblPrueba.setFont(fuente);
+        // Aplica Fuente
+        lblRotulo.setFont(fuente);
     }
-
 }
