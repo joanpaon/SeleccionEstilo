@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 José A. Pacheco Ondoño - joanpaon@gmail.com.
+ * Copyright 2019 José A. Pacheco Ondoño - joanpaon@gmail.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,14 +58,14 @@ public final class GUI extends JFrame {
 
     // Referencias
     private Properties prp;
-    
+
     // Componentes
     private JCheckBox cbxNegrita;
     private JCheckBox cbxCursiva;
     private JLabel lblRotulo;
     private JPanel pnlControl;
     private JPanel pnlPpal;
-    
+
     // Fuentes
     private Font fntRotulo;
     private Font fntInterfaz;
@@ -93,10 +93,10 @@ public final class GUI extends JFrame {
                 DEF_FONT_BANNER_SYSTEM_NAME,
                 DEF_FONT_BANNER_FALLBACK_NAME);
         fntInterfaz = UtilesSwing.generarFuenteRecurso(
-                prp.getProperty(PRP_FONT_INTERFACE_RESOURCE), 
+                prp.getProperty(PRP_FONT_INTERFACE_RESOURCE),
                 DEF_FONT_INTERFACE_SYSTEM_NAME,
                 DEF_FONT_INTERFACE_FALLBACK_NAME);
-                
+
         // Etiqueta de prueba
         lblRotulo = new JLabel();
         lblRotulo.setBackground(Color.WHITE);
@@ -108,7 +108,6 @@ public final class GUI extends JFrame {
 
         // Selector de negrita
         cbxNegrita = new JCheckBox("Negrita");
-        cbxNegrita.addActionListener(new AEM(this));
         cbxNegrita.setFont(fntInterfaz.deriveFont(Font.PLAIN, 20));
         cbxNegrita.setHorizontalAlignment(JCheckBox.CENTER);
         cbxNegrita.setOpaque(false);
@@ -116,7 +115,6 @@ public final class GUI extends JFrame {
 
         // Selector de cursiva
         cbxCursiva = new JCheckBox("Cursiva");
-        cbxCursiva.addActionListener(new AEM(this));
         cbxCursiva.setFont(fntInterfaz.deriveFont(Font.PLAIN, 20));
         cbxCursiva.setHorizontalAlignment(JCheckBox.CENTER);
         cbxCursiva.setOpaque(false);
@@ -161,6 +159,10 @@ public final class GUI extends JFrame {
         // Establecer Favicon
         UtilesSwing.establecerFavicon(this, prp.getProperty(
                 PRP_FAVICON_RESOURCE, DEF_FAVICON_RESOURCE));
+
+        // Registra los Gestores de Eventos
+        cbxNegrita.addActionListener(new AEM(this));
+        cbxCursiva.addActionListener(new AEM(this));
     }
 
     // Procesar Estilo
@@ -169,7 +171,7 @@ public final class GUI extends JFrame {
         String familia = lblRotulo.getFont().getFamily();
         int estilo = lblRotulo.getFont().getStyle();
         int talla = lblRotulo.getFont().getSize();
-                
+
         // Estilo Seleccionado        
         int negrita = cbxNegrita.isSelected() ? Font.BOLD : Font.PLAIN;
         int cursiva = cbxCursiva.isSelected() ? Font.ITALIC : Font.PLAIN;
