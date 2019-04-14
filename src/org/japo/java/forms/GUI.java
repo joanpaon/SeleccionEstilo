@@ -85,7 +85,7 @@ public final class GUI extends JFrame {
         initAfter();
     }
 
-    // Construcción del IGU
+    // Construcción del GUI
     private void initComponents() {
         // Fuentes
         fntRotulo = UtilesSwing.generarFuenteRecurso(
